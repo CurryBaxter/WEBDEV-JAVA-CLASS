@@ -1,0 +1,7 @@
+/workspaces/java-postgres-8/customer/src/main/java/exam/CRMApplication.java
+/workspaces/java-postgres-8/customer/src/main/java/exam/CRMConfiguration.java
+/workspaces/java-postgres-8/customer/src/main/java/exam/api/Customer.java
+/workspaces/java-postgres-8/customer/src/main/java/exam/db/CustomerDAO.java
+/workspaces/java-postgres-8/customer/src/main/java/exam/db/CustomerMapper.java
+/workspaces/java-postgres-8/customer/src/main/java/exam/health/DatabaseHealthCheck.java
+/workspaces/java-postgres-8/customer/src/main/java/exam/resources/CustomerResource.java

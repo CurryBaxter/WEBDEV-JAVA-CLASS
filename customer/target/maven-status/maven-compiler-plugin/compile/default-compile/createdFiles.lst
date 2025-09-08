@@ -1,0 +1,9 @@
+exam/db/CustomerMapper.class
+exam/health/DatabaseHealthCheck.class
+exam/api/Customer$CustomerType.class
+exam/CRMConfiguration.class
+exam/api/Customer$Status.class
+exam/CRMApplication.class
+exam/db/CustomerDAO.class
+exam/api/Customer.class
+exam/resources/CustomerResource.class
