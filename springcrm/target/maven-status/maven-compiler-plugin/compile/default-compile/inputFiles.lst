@@ -1,0 +1,7 @@
+/workspaces/java-postgres-8/springcrm/src/main/java/com/customer/controller/SimpleController.java
+/workspaces/java-postgres-8/springcrm/src/main/java/com/customer/controller/CustomerController.java
+/workspaces/java-postgres-8/springcrm/src/main/java/com/customer/config/Application.java
+/workspaces/java-postgres-8/springcrm/src/main/java/com/customer/persistence/model/Book.java
+/workspaces/java-postgres-8/springcrm/src/main/java/com/customer/persistence/model/Customer.java
+/workspaces/java-postgres-8/springcrm/src/main/java/com/customer/persistence/repo/BookRepository.java
+/workspaces/java-postgres-8/springcrm/src/main/java/com/customer/persistence/repo/CustomerRepository.java
