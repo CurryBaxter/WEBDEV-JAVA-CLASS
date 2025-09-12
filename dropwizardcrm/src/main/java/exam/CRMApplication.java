@@ -22,32 +22,24 @@ public class CRMApplication extends Application<CRMConfiguration> {
 
     @Override
     public void initialize(final Bootstrap<CRMConfiguration> bootstrap) {
-        // Application initialization logic goes here.
     }
 
     @Override
     public void run(final CRMConfiguration configuration,
                     final Environment environment) {
-        // 1. Create the JDBI factory to connect to the database using the config.yml file.
         final JdbiFactory factory = new JdbiFactory();
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "postgresql");
 
-        // 2. Now that you have a `jdbi` object, create an instance of the health check with it.
         final DatabaseHealthCheck databaseHealthCheck = new DatabaseHealthCheck(jdbi);
 
-        // 3. Register the health check with a descriptive name.
         environment.healthChecks().register("database", databaseHealthCheck);
 
-        // 4. Create the JDBI-based DAO (not the old in-memory one).
         final CustomerDAO customerDAO = jdbi.onDemand(CustomerDAO.class);
 
-        // Ensure the database table exists.
         customerDAO.createTable();
 
-        // 5. Create the resource instance, injecting the DAO.
         final CustomerResource customerResource = new CustomerResource(customerDAO);
 
-        // 6. Register the resource with the Jersey environment.
         environment.jersey().register(customerResource);
     }
 }

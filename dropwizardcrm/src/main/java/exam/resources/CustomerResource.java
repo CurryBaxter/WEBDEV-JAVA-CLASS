@@ -37,7 +37,6 @@ public class CustomerResource {
 
     @POST
     public Response createCustomer(@NotNull @Valid Customer customer) {
-        // Ensure the client doesn't set the ID
         customer.setId(0);
         Customer newCustomer = customerDAO.save(customer);
         URI location = UriBuilder.fromResource(CustomerResource.class).path("{id}").build(newCustomer.getId());
@@ -49,7 +48,7 @@ public class CustomerResource {
     public Response updateCustomer(@PathParam("id") Long id, @NotNull @Valid Customer customer) {
         return customerDAO.findById(id)
                 .map(existingCustomer -> {
-                    customer.setId(id); // Ensure the ID from the path is used
+                    customer.setId(id);
                     Customer updatedCustomer = customerDAO.save(customer);
                     return Response.ok(updatedCustomer).build();
                 })

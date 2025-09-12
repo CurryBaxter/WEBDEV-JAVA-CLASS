@@ -50,14 +50,12 @@ public interface CustomerDAO {
     // Helper method to save (insert or update)
     default Customer save(Customer customer) {
         if (customer.getId() == 0) {
-            // Insert new and get the generated ID
             if (customer.getStatus() == null) {
                 customer.setStatus(Customer.Status.LEAD);
             }
             long generatedId = insert(customer);
             customer.setId(generatedId);
         } else {
-            // Update existing
             update(customer);
         }
         return customer;

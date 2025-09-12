@@ -51,7 +51,6 @@ public class Customer {
         LIMITED_LIABILITY_COMPANY
     }
 
-    // Default constructor for Jackson deserialization
     public Customer() {}
 
     public Customer(long id, String name, String contactPerson, String address, String email, String phone,
@@ -180,7 +179,7 @@ public class Customer {
         this.wantsToBeContactedBy = wantsToBeContactedBy;
     }
 
-    // Add this method for database serialization
+    
     public String getWantsToBeContactedByAsString() {
         return wantsToBeContactedBy != null ? String.join(",", wantsToBeContactedBy) : "";
     }

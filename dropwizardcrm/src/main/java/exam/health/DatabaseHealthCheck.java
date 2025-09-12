@@ -17,13 +17,9 @@ public class DatabaseHealthCheck extends HealthCheck {
     @Override
     protected Result check() throws Exception {
         try {
-            // Use JDBI to handle the connection and execute a simple validation query.
-            // 'SELECT 1' is a standard, lightweight query supported by most databases.
             jdbi.withHandle(handle -> handle.execute("SELECT 1"));
             return Result.healthy("Database connection is healthy.");
         } catch (Exception e) {
-            // If an exception occurs, the health check fails.
-            // We include the error message for debugging purposes.
             return Result.unhealthy("Cannot connect to the database: " + e.getMessage());
         }
     }
