@@ -3,29 +3,33 @@ package com.customer.dto;
 import com.customer.persistence.model.Customer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 
 public class CustomerRequest {
 
     @NotEmpty(message = "Name is required")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     @JsonProperty
     private String name;
 
     @NotEmpty(message = "Contact person is required")
+    @Size(min = 2, max = 100, message = "Contact person must be between 2 and 100 characters")
     @JsonProperty
     private String contactPerson;
 
+    @Size(max = 255, message = "Address must not exceed 255 characters")
     @JsonProperty
     private String address;
 
     @Email(message = "Email should be valid")
+    @Size(max = 100, message = "Email must not exceed 100 characters")
     @JsonProperty
     private String email;
 
+    @Pattern(regexp = "^[+]?[0-9\\s\\-()]+$", message = "Phone number format is invalid")
+    @Size(max = 20, message = "Phone number must not exceed 20 characters")
     @JsonProperty
     private String phone;
 
@@ -33,9 +37,11 @@ public class CustomerRequest {
     @JsonProperty
     private Customer.CustomerType customerType;
 
+    @Size(max = 100, message = "Industry must not exceed 100 characters")
     @JsonProperty
     private String industry;
 
+    @PastOrPresent(message = "Last contact date cannot be in the future")
     @JsonProperty
     private LocalDate lastContactDate;
 
@@ -43,8 +49,9 @@ public class CustomerRequest {
     @JsonProperty
     private Customer.Status status;
 
+    @Size(max = 10, message = "Maximum 10 contact methods allowed")
     @JsonProperty
-    private List<String> wantsToBeContactedBy;
+    private List<@NotEmpty(message = "Contact method cannot be empty") String> wantsToBeContactedBy;
 
     // Constructors
     public CustomerRequest() {}

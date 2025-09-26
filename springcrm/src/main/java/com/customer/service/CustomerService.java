@@ -6,12 +6,16 @@ import com.customer.persistence.model.Customer;
 import com.customer.persistence.repo.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Validated
 public class CustomerService {
 
     @Autowired
@@ -24,11 +28,18 @@ public class CustomerService {
     }
 
     public Optional<CustomerResponse> getCustomerById(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Customer ID must be a positive number");
+        }
         return customerRepository.findById(id)
                 .map(CustomerResponse::new);
     }
 
-    public CustomerResponse createCustomer(CustomerRequest request) {
+    public CustomerResponse createCustomer(@Valid CustomerRequest request) {
+        if (request == null) {
+            throw new IllegalArgumentException("Customer request cannot be null");
+        }
+
         Customer customer = convertToEntity(request);
         
         if (customer.getStatus() == null) {
@@ -39,7 +50,14 @@ public class CustomerService {
         return new CustomerResponse(savedCustomer);
     }
 
-    public Optional<CustomerResponse> updateCustomer(Long id, CustomerRequest request) {
+    public Optional<CustomerResponse> updateCustomer(Long id, @Valid CustomerRequest request) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Customer ID must be a positive number");
+        }
+        if (request == null) {
+            throw new IllegalArgumentException("Customer request cannot be null");
+        }
+
         return customerRepository.findById(id)
                 .map(existingCustomer -> {
                     Customer updatedCustomer = convertToEntity(request);
@@ -50,6 +68,10 @@ public class CustomerService {
     }
 
     public boolean deleteCustomer(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Customer ID must be a positive number");
+        }
+
         return customerRepository.findById(id)
                 .map(customer -> {
                     customerRepository.delete(customer);

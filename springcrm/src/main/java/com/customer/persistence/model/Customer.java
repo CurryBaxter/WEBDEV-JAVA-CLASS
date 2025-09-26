@@ -2,8 +2,7 @@ package com.customer.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -16,39 +15,53 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @NotEmpty
-    @Column(nullable = false)
+    @NotEmpty(message = "Name is required")
+    @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @NotEmpty
-    @Column(name = "contact_person", nullable = false)
+    @NotEmpty(message = "Contact person is required")
+    @Size(min = 2, max = 100, message = "Contact person must be between 2 and 100 characters")
+    @Column(name = "contact_person", nullable = false, length = 100)
     private String contactPerson;
 
+    @Size(max = 255, message = "Address must not exceed 255 characters")
+    @Column(length = 255)
     private String address;
 
+    @Email(message = "Email should be valid")
+    @Size(max = 100, message = "Email must not exceed 100 characters")
+    @Column(length = 100)
     private String email;
 
+    @Pattern(regexp = "^[+]?[0-9\\s\\-()]+$", message = "Phone number format is invalid")
+    @Size(max = 20, message = "Phone number must not exceed 20 characters")
+    @Column(length = 20)
     private String phone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "customer_type", nullable = false)
-    @NotNull
+    @NotNull(message = "Customer type is required")
     private CustomerType customerType;
 
+    @Size(max = 100, message = "Industry must not exceed 100 characters")
+    @Column(length = 100)
     private String industry;
 
+    @PastOrPresent(message = "Last contact date cannot be in the future")
     @Column(name = "last_contact_date")
     private LocalDate lastContactDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    @NotNull
+    @NotNull(message = "Status is required")
     private Status status;
 
     @ElementCollection
     @CollectionTable(name = "customer_contact_methods", joinColumns = @JoinColumn(name = "customer_id"))
     @Column(name = "contact_method")
-    private List<String> wantsToBeContactedBy;
+    @Size(max = 10, message = "Maximum 10 contact methods allowed")
+    private List<@NotEmpty(message = "Contact method cannot be empty") String> wantsToBeContactedBy;
 
     public enum Status {
         LEAD, COLD, WARM, CUSTOMER, CLOSED
