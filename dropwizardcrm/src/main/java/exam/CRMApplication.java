@@ -1,6 +1,7 @@
 package exam;
 
 import exam.db.CustomerDAO;
+import exam.exceptions.*;
 import exam.health.DatabaseHealthCheck;
 import exam.resources.CustomerResource;
 import io.dropwizard.core.Application;
@@ -31,16 +32,20 @@ public class CRMApplication extends Application<CRMConfiguration> {
         final Jdbi jdbi = factory.build(environment, configuration.getDataSourceFactory(), "postgresql");
 
         final DatabaseHealthCheck databaseHealthCheck = new DatabaseHealthCheck(jdbi);
-
         environment.healthChecks().register("database", databaseHealthCheck);
 
         final CustomerDAO customerDAO = jdbi.onDemand(CustomerDAO.class);
-
         customerDAO.createTable();
 
         final CustomerResource customerResource = new CustomerResource(customerDAO);
-
         environment.jersey().register(customerResource);
+
+        // Register Exception Mappers
+        environment.jersey().register(new ValidationExceptionMapper());
+        environment.jersey().register(new JsonProcessingExceptionMapper());
+        environment.jersey().register(new IllegalArgumentExceptionMapper());
+        environment.jersey().register(new WebApplicationExceptionMapper());
+        environment.jersey().register(new RuntimeExceptionMapper());
     }
 }
 
