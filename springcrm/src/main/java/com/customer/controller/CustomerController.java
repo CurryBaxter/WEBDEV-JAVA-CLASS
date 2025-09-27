@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/api/customers")
 public class CustomerController {
 
     @Autowired

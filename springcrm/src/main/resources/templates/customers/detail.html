@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Customer Details - ' + ${customer.name}">Kundendetails</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-people-fill"></i> CRM System
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/customers">Kunden</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="bi bi-person"></i> Kunden Details</h2>
+            <div>
+                <a th:href="@{/customers/{id}/edit(id=${customer.id})}" class="btn btn-primary">
+                    <i class="bi bi-pencil"></i> Bearbeiten
+                </a>
+                <a href="/customers" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i>Zurück zur Liste
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Grundinformationen</h5>
+                        <span th:text="${customer.status}" 
+                              th:class="'badge ' + ${customer.status == 'CUSTOMER' ? 'bg-success' : 
+                                                   customer.status == 'LEAD' ? 'bg-warning' : 
+                                                   customer.status == 'WARM' ? 'bg-info' : 
+                                                   customer.status == 'COLD' ? 'bg-primary' : 'bg-dark'}">Status</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label text-muted">Kunden-ID</label>
+                                <p class="fw-bold" th:text="${customer.id}">1</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted">Kundentyp</label>
+                                <p th:text="${#strings.replace(customer.customerType, '_', ' ')}" class="fw-bold">Type</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted">Firmenname</label>
+                                <p class="fw-bold" th:text="${customer.name}">Name des Kunden</p>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-muted">Ansprechpartner</label>
+                                <p class="fw-bold" th:text="${customer.contactPerson}">Ansprechpartner</p>
+                            </div>
+                            <div class="col-12" th:if="${customer.address}">
+                                <label class="form-label text-muted">Addresse</label>
+                                <p th:text="${customer.address}">Addresse</p>
+                            </div>
+                            <div class="col-12" th:if="${customer.industry}">
+                                <label class="form-label text-muted">Industrie/Branche</label>
+                                <p th:text="${customer.industry}">Industrie/Branche</p>
+                            </div>
+                            <div class="col-md-6" th:if="${customer.lastContactDate}">
+                                <label class="form-label text-muted">zuletzt kontaktiert</label>
+                                <p th:text="${#temporals.format(customer.lastContactDate, 'yyyy-MM-dd')}">Datum</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Kontaktinformationen</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3" th:if="${customer.email}">
+                            <label class="form-label text-muted">
+                                <i class="bi bi-envelope"></i> Email
+                            </label>
+                            <p>
+                                <a th:href="'mailto:' + ${customer.email}" th:text="${customer.email}">email@beispiel.de</a>
+                            </p>
+                        </div>
+                        <div class="mb-3" th:if="${customer.phone}">
+                            <label class="form-label text-muted">
+                                <i class="bi bi-telephone"></i> Telefon
+                            </label>
+                            <p>
+                                <a th:href="'tel:' + ${customer.phone}" th:text="${customer.phone}">+1234567890</a>
+                            </p>
+                        </div>
+                        <div th:if="${customer.wantsToBeContactedBy and !#lists.isEmpty(customer.wantsToBeContactedBy)}">
+                            <label class="form-label text-muted">
+                                <i class="bi bi-chat"></i> Bevorzugte Kontaktmethoden
+                            </label>
+                            <div>
+                                <span th:each="method : ${customer.wantsToBeContactedBy}" 
+                                      th:text="${method}" 
+                                      class="badge bg-light text-dark me-1">Methode</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5 class="mb-0">Aktionen</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a th:href="@{/customers/{id}/edit(id=${customer.id})}" 
+                               class="btn btn-primary">
+                                <i class="bi bi-pencil"></i> Kunden bearbeiten
+                            </a>
+                            <button type="button" class="btn btn-danger" 
+                                    onclick="confirmDelete([[${customer.id}]], '[[${customer.name}]]')">
+                                <i class="bi bi-trash"></i> Löschen
+                            </button>
+                            <a href="/customers" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Zurück zur Liste
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Löschen bestätigen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bist du sicher, dass du diesen Kunden löschen möchtest? "<span id="customerName"></span>"?</p>
+                    <p class="text-muted small">Diese Aktion kann nicht rückgängig gemacht werden.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                    <form id="deleteForm" method="post" style="display: inline;">
+                        <button type="submit" class="btn btn-danger">Löschen</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmDelete(customerId, customerName) {
+            document.getElementById('customerName').textContent = customerName;
+            document.getElementById('deleteForm').action = '/customers/' + customerId + '/delete';
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+    </script>
+</body>
+</html>

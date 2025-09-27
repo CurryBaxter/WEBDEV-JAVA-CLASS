@@ -36,7 +36,8 @@ public class Customer {
 
     @Pattern(regexp = "^[+]?[0-9\\s\\-()]+$", message = "Phone number format is invalid")
     @Size(max = 20, message = "Phone number must not exceed 20 characters")
-    @Column(length = 20)
+    @NotBlank(message = "Phone number is required")  // Changed from @NotEmpty to @NotBlank
+    @Column(length = 20, nullable = false)  // Added nullable = false
     private String phone;
 
     @Enumerated(EnumType.STRING)
@@ -68,8 +69,8 @@ public class Customer {
     }
 
     public enum CustomerType {
-        SOLE_PROPRIETORSHIP,
-        LIMITED_LIABILITY_COMPANY
+        LIMITED_LIABILITY_COMPANY, SOLE_PROPRIETORSHIP,
+        CORPORATION, NON_PROFIT_ORGANIZATION
     }
 
     // Constructors

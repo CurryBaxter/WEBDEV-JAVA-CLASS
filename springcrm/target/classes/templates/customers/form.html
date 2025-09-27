@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${isEdit ? 'Edit Customer' : 'Add New Customer'}">Kundenformular</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#6b7280'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="/" class="flex items-center space-x-2 text-xl font-bold hover:text-blue-200 transition">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                    </svg>
+                    <span>CRM System</span>
+                </a>
+                <div class="flex space-x-4">
+                    <a href="/" class="hover:text-blue-200 transition">Home</a>
+                    <a href="/customers" class="hover:text-blue-200 transition">Kunden</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">
+                <svg th:class="${isEdit ? 'w-8 h-8 inline mr-3 text-blue-600' : 'w-8 h-8 inline mr-3 text-green-600'}" 
+                     fill="currentColor" viewBox="0 0 20 20">
+                    <path th:if="${isEdit}" d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                    <path th:unless="${isEdit}" d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+                </svg>
+                <span th:text="${isEdit ? 'Edit Customer' : 'Add New Customer'}">Kundenformular</span>
+            </h1>
+            <a href="/customers" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition flex items-center space-x-2">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                </svg>
+                <span>Zurück zur Liste</span>
+            </a>
+        </div>
+
+        <!-- Error Display -->
+        <div th:if="${error}" class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="flex">
+                <svg class="w-5 h-5 text-red-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                </svg>
+                <div class="ml-3">
+                    <p class="text-sm text-red-700" th:text="${error}"></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug Test Info -->
+        <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div class="flex">
+                <svg class="w-5 h-5 text-blue-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            <div class="ml-3">
+                <p class="text-sm text-blue-700">
+                    <strong>Debug Mode:</strong> Client-side validation is disabled. Try entering invalid data (letters in phone field, invalid email, empty required fields) to see server-side validation errors and debug information.
+                </p>
+            </div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+            <div class="px-8 py-6">
+                <form th:action="${isEdit ? '/customers/' + customer.id : '/customers'}" 
+                      th:object="${customer}" method="post" class="space-y-6" novalidate>
+                    
+                    <input type="hidden" th:if="${isEdit}" th:field="*{id}">
+                    
+                    <!-- Basic Information Section -->
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Grundinformationen</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Company Name -->
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Firmenname <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="name" th:field="*{name}" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       th:classappend="${#fields.hasErrors('name')} ? 'border-red-500 focus:ring-red-500' : ''"
+                                       maxlength="100">
+                                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+
+                            <!-- Contact Person -->
+                            <div>
+                                <label for="contactPerson" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Ansprechpartner <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" id="contactPerson" th:field="*{contactPerson}" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       th:classappend="${#fields.hasErrors('contactPerson')} ? 'border-red-500 focus:ring-red-500' : ''"
+                                       maxlength="100">
+                                <p th:if="${#fields.hasErrors('contactPerson')}" th:errors="*{contactPerson}" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information Section -->
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Kontaktinformationen</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Email -->
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Email
+                                    <span class="text-xs text-gray-500">(Try: invalid-email or leave empty)</span>
+                                </label>
+                                <input type="text" id="email" th:field="*{email}" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'border-red-500 focus:ring-red-500' : ''"
+                                       maxlength="100">
+                                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+
+                            <!-- Phone -->
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Telefon <span class="text-red-500">*</span>
+                                    <span class="text-xs text-gray-500">(Try: abc123 or leave empty)</span>
+                                </label>
+                                <input type="text" id="phone" th:field="*{phone}" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       th:classappend="${#fields.hasErrors('phone')} ? 'border-red-500 focus:ring-red-500' : ''"
+                                       maxlength="20">
+                                <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+                        </div>
+
+                        <!-- Address -->
+                        <div class="mt-6">
+                            <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Addresse</label>
+                            <textarea id="address" th:field="*{address}" rows="3" 
+                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                      th:classappend="${#fields.hasErrors('address')} ? 'border-red-500 focus:ring-red-500' : ''"
+                                      maxlength="255"></textarea>
+                            <p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="mt-1 text-sm text-red-600"></p>
+                        </div>
+                    </div>
+
+                    <!-- Business Information Section -->
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Firmeninformationen</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Customer Type -->
+                            <div>
+                                <label for="customerType" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Unternehmsform <span class="text-red-500">*</span>
+                                    <span class="text-xs text-gray-500">(Try: leave empty)</span>
+                                </label>
+                                <select id="customerType" th:field="*{customerType}" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        th:classappend="${#fields.hasErrors('customerType')} ? 'border-red-500 focus:ring-red-500' : ''">
+                                    <option value="">auswählen</option>
+                                    <option value="SOLE_PROPRIETORSHIP">Einzelunternehmen</option>
+                                    <option value="LIMITED_LIABILITY_COMPANY">Kleingewerbe</option>
+                                    <option value="CORPORATION">GmbH</option>
+                                    <option value="NON_PROFIT_ORGANIZATION">Non-Profit</option>
+                                </select>
+                                <p th:if="${#fields.hasErrors('customerType')}" th:errors="*{customerType}" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+
+                            <!-- Status -->
+                            <div>
+                                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Status <span class="text-red-500">*</span>
+                                    <span class="text-xs text-gray-500">(Try: leave empty)</span>
+                                </label>
+                                <select id="status" th:field="*{status}" 
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        th:classappend="${#fields.hasErrors('status')} ? 'border-red-500 focus:ring-red-500' : ''">
+                                    <option value="">Status auswählen</option>
+                                    <option value="LEAD">Lead</option>
+                                    <option value="COLD">Cold</option>
+                                    <option value="WARM">Warm</option>
+                                    <option value="CUSTOMER">Kunde</option>
+                                    <option value="CLOSED">Closed</option>
+                                </select>
+                                <p th:if="${#fields.hasErrors('status')}" th:errors="*{status}" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+
+                            <!-- Industry -->
+                            <div>
+                                <label for="industry" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Industrie/Branche
+                                    <span class="text-xs text-gray-500">(Try: very long text over 100 characters)</span>
+                                </label>
+                                <input type="text" id="industry" th:field="*{industry}" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       th:classappend="${#fields.hasErrors('industry')} ? 'border-red-500 focus:ring-red-500' : ''"
+                                       maxlength="200">
+                                <p th:if="${#fields.hasErrors('industry')}" th:errors="*{industry}" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+
+                            <!-- Last Contact Date -->
+                            <div>
+                                <label for="lastContactDate" class="block text-sm font-medium text-gray-700 mb-2">
+                                    zuletzt kontaktiert
+                                    <span class="text-xs text-gray-500">(Try: future date)</span>
+                                </label>
+                                <input type="date" id="lastContactDate" th:field="*{lastContactDate}" 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                       th:classappend="${#fields.hasErrors('lastContactDate')} ? 'border-red-500 focus:ring-red-500' : ''">
+                                <p th:if="${#fields.hasErrors('lastContactDate')}" th:errors="*{lastContactDate}" class="mt-1 text-sm text-red-600"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Preferences Section -->
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900 mb-4">Kontaktpräferenzen</h3>
+                        <div class="space-y-2">
+                            <p class="text-sm text-gray-600 mb-3">Wähle die bevorzugte Methode aus:</p>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input type="checkbox" th:field="*{wantsToBeContactedBy}" value="email" 
+                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <span class="text-sm text-gray-700">Email</span>
+                                </label>
+                                <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input type="checkbox" th:field="*{wantsToBeContactedBy}" value="phone"
+                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <span class="text-sm text-gray-700">Telefon</span>
+                                </label>
+                                <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input type="checkbox" th:field="*{wantsToBeContactedBy}" value="mail" 
+                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <span class="text-sm text-gray-700">Post</span>
+                                </label>
+                                <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input type="checkbox" th:field="*{wantsToBeContactedBy}" value="sms" 
+                                           class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                                    <span class="text-sm text-gray-700">SMS</span>
+                                </label>
+                            </div>
+                            <p th:if="${#fields.hasErrors('wantsToBeContactedBy')}" th:errors="*{wantsToBeContactedBy}" class="mt-1 text-sm text-red-600"></p>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="border-t border-gray-200 pt-6">
+                        <div class="flex justify-end space-x-4">
+                            <a href="/customers" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition flex items-center space-x-2">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>Abbrechen</span>
+                            </a>
+                            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center space-x-2">
+                                <svg th:if="${isEdit}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                                <svg th:unless="${isEdit}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span th:text="${isEdit ? 'Update Customer' : 'Create Customer'}">Speichern</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

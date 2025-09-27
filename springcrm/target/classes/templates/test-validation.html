@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Validation Errors - CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="/" class="flex items-center space-x-2 text-xl font-bold hover:text-blue-200 transition">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                    </svg>
+                    <span>CRM System</span>
+                </a>
+                <div class="flex space-x-4">
+                    <a href="/" class="hover:text-blue-200 transition">Home</a>
+                    <a href="/customers" class="hover:text-blue-200 transition">Customers</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Test Validation & Debug Information</h1>
+        
+        <!-- Test Buttons -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Web Form Test -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-bold mb-4 text-blue-600">Web Form Validation Test</h2>
+                <p class="text-gray-600 mb-4">Click to submit a form with invalid data. This shows validation errors IN THE FORM (not via WebExceptionHandler).</p>
+                
+                <form action="/customers" method="post" class="space-y-4 mb-4">
+                    <input type="hidden" name="name" value="">
+                    <input type="hidden" name="contactPerson" value="">
+                    <input type="hidden" name="email" value="invalid-email">
+                    <input type="hidden" name="phone" value="abc123">
+                    <input type="hidden" name="customerType" value="">
+                    <input type="hidden" name="status" value="">
+                    <input type="hidden" name="industry" value="This is a very long industry description that exceeds the maximum allowed length of 100 characters and should trigger a validation error">
+                    <input type="hidden" name="lastContactDate" value="2025-12-31">
+                    
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                        Submit Invalid Form Data (Form Errors)
+                    </button>
+                </form>
+                
+                <!-- Force WebExceptionHandler Test -->
+                <form action="/customers" method="post" class="space-y-4">
+                    <input type="hidden" name="name" value="FORCE_ERROR">
+                    <input type="hidden" name="contactPerson" value="Test">
+                    <input type="hidden" name="email" value="test@example.com">
+                    <input type="hidden" name="phone" value="123456789">
+                    <input type="hidden" name="customerType" value="CORPORATION">
+                    <input type="hidden" name="status" value="LEAD">
+                    
+                    <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
+                        Force WebExceptionHandler (Debug Page)
+                    </button>
+                </form>
+            </div>
+
+            <!-- Exception Handler Tests -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-xl font-bold mb-4 text-red-600">WebExceptionHandler Tests</h2>
+                <p class="text-gray-600 mb-4">These will trigger the WebExceptionHandler and show the debug error page.</p>
+                
+                <div class="space-y-3">
+                    <form action="/test-force-error" method="post">
+                        <input type="hidden" name="errorType" value="illegal-argument">
+                        <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
+                            IllegalArgumentException
+                        </button>
+                    </form>
+                    
+                    <form action="/test-force-error" method="post">
+                        <input type="hidden" name="errorType" value="null-pointer">
+                        <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
+                            NullPointerException
+                        </button>
+                    </form>
+                    
+                    <form action="/test-force-error" method="post">
+                        <input type="hidden" name="errorType" value="generic">
+                        <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
+                            Generic RuntimeException
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Test Section -->
+        <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
+            <h2 class="text-xl font-bold mb-4 text-green-600">API Validation Test</h2>
+            <p class="text-gray-600 mb-4">Use curl commands to test API validation (these use GlobalExceptionHandler):</p>
+            
+            <div class="bg-gray-100 p-3 rounded text-sm font-mono mb-4">
+                <p class="mb-2"># Test with invalid JSON:</p>
+                <p class="text-xs break-all">curl -X POST http://localhost:8082/api/customers -H "Content-Type: application/json" -d '{"invalid": json}'</p>
+            </div>
+            
+            <div class="bg-gray-100 p-3 rounded text-sm font-mono mb-4">
+                <p class="mb-2"># Test with validation errors:</p>
+                <p class="text-xs break-all">curl -X POST http://localhost:8082/api/customers -H "Content-Type: application/json" -d '{}'</p>
+            </div>
+            
+            <a href="/api/customers" target="_blank" class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">
+                View API Endpoint
+            </a>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
+            <h3 class="text-lg font-bold text-yellow-900 mb-3">Important Notes</h3>
+            <div class="space-y-3 text-yellow-800">
+                <p><strong>Form Validation vs Exception Handler:</strong></p>
+                <ul class="list-disc list-inside ml-4 space-y-1">
+                    <li><strong>Blue buttons:</strong> Normal form validation - errors show IN THE FORM (handled by controller)</li>
+                    <li><strong>Red buttons:</strong> Force exceptions - shows DEBUG ERROR PAGE (handled by WebExceptionHandler)</li>
+                </ul>
+                <p><strong>API vs Web:</strong></p>
+                <ul class="list-disc list-inside ml-4 space-y-1">
+                    <li><strong>API endpoints (/api/*):</strong> Use GlobalExceptionHandler (JSON responses)</li>
+                    <li><strong>Web endpoints (/customers):</strong> Use WebExceptionHandler (HTML error pages)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

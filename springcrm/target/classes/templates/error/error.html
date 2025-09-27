@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Error - ' + ${errorTitle}">Error</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-blue-600 text-white shadow-lg">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <a href="/" class="flex items-center space-x-2 text-xl font-bold hover:text-blue-200 transition">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                    </svg>
+                    <span>CRM System</span>
+                </a>
+                <div class="flex space-x-4">
+                    <a href="/" class="hover:text-blue-200 transition">Home</a>
+                    <a href="/customers" class="hover:text-blue-200 transition">Customers</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 py-8">
+        <!-- Error Header -->
+        <div class="mb-8">
+            <div class="flex items-center mb-4">
+                <svg class="w-12 h-12 text-red-500 mr-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900" th:text="${errorTitle}">Error</h1>
+                    <p class="text-gray-600" th:text="'Status: ' + ${errorStatus}">Status Code</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Message -->
+        <div class="bg-red-50 border border-red-200 rounded-lg p-6 mb-6">
+            <h2 class="text-lg font-semibold text-red-900 mb-2">What happened?</h2>
+            <p class="text-red-700" th:text="${errorMessage}">Error message</p>
+            <p class="text-sm text-red-600 mt-2">
+                <span class="font-medium">Path:</span> <span th:text="${path}">Path</span> |
+                <span class="font-medium">Time:</span> <span th:text="${timestamp}">Timestamp</span>
+            </p>
+        </div>
+
+        <!-- Validation Errors -->
+        <div th:if="${validationErrors and !#lists.isEmpty(validationErrors)}" class="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-6">
+            <h2 class="text-lg font-semibold text-yellow-900 mb-4">Validation Errors</h2>
+            <div class="space-y-3">
+                <div th:each="error : ${validationErrors}" class="flex items-start space-x-3">
+                    <svg class="w-5 h-5 text-yellow-600 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                    <div class="flex-1">
+                        <p class="font-medium text-yellow-900" th:text="${error.field}">Field</p>
+                        <p class="text-yellow-700 text-sm" th:text="${error.message}">Error message</p>
+                        <p th:if="${error.rejectedValue}" class="text-yellow-600 text-xs mt-1">
+                            Rejected value: <span class="font-mono" th:text="${error.rejectedValue}">Value</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Debug Information -->
+        <div th:if="${debugEnabled and debugInfo}" class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden mb-6">
+            <div class="bg-gray-100 px-6 py-3 border-b border-gray-200">
+                <button onclick="toggleDebugSection()" class="flex items-center justify-between w-full text-left">
+                    <h2 class="text-lg font-semibold text-gray-900">Debug Information</h2>
+                    <svg id="debugChevron" class="w-5 h-5 text-gray-600 transform transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="debugContent" class="hidden">
+                <div class="p-6 space-y-6">
+                    <!-- Exception Details -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Exception Details</h3>
+                        <div class="bg-white border border-gray-200 rounded p-3 text-sm">
+                            <p><span class="font-medium">Exception Type:</span> <span class="font-mono" th:text="${debugInfo.exceptionClass}">Type</span></p>
+                            <p class="mt-1"><span class="font-medium">Message:</span> <span th:text="${debugInfo.exceptionMessage}">Message</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Request Details -->
+                    <div>
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Request Details</h3>
+                        <div class="bg-white border border-gray-200 rounded p-3 text-sm space-y-1">
+                            <p><span class="font-medium">Method:</span> <span class="font-mono" th:text="${debugInfo.requestMethod}">Method</span></p>
+                            <p><span class="font-medium">URL:</span> <span class="font-mono break-all" th:text="${debugInfo.requestURL}">URL</span></p>
+                            <p><span class="font-medium">Remote Address:</span> <span class="font-mono" th:text="${debugInfo.remoteAddress}">IP</span></p>
+                            <p><span class="font-medium">User Agent:</span> <span class="text-xs break-all" th:text="${debugInfo.userAgent}">User Agent</span></p>
+                        </div>
+                    </div>
+
+                    <!-- Request Parameters -->
+                    <div th:if="${debugInfo.requestParameters}">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Request Parameters</h3>
+                        <div class="bg-white border border-gray-200 rounded p-3 text-sm">
+                            <div th:each="param : ${debugInfo.requestParameters}" class="mb-1">
+                                <span class="font-medium font-mono" th:text="${param.key}">Key</span>: 
+                                <span class="font-mono" th:text="${#strings.arrayJoin(param.value, ', ')}">Values</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stack Trace -->
+                    <div th:if="${debugInfo.stackTrace}">
+                        <h3 class="text-sm font-semibold text-gray-900 mb-2">Stack Trace (first 10 lines)</h3>
+                        <div class="bg-gray-900 text-green-400 rounded p-3 text-xs font-mono overflow-x-auto">
+                            <div th:each="line : ${debugInfo.stackTrace}" th:text="${line}" class="whitespace-nowrap"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-center space-x-4">
+            <a href="javascript:history.back()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition">
+                Go Back
+            </a>
+            <a href="/" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition">
+                Go Home
+            </a>
+            <a href="/customers" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg transition">
+                View Customers
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function toggleDebugSection() {
+            const content = document.getElementById('debugContent');
+            const chevron = document.getElementById('debugChevron');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                chevron.classList.remove('rotate-180');
+            }
+        }
+    </script>
+</body>
+</html>
