@@ -1,4 +1,4 @@
-package main.java.exam.exceptions;
+package exam.exceptions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import exam.api.error.ProblemDetail;

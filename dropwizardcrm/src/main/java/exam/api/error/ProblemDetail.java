@@ -1,4 +1,4 @@
-package main.java.exam.api.error;
+package exam.api.error;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

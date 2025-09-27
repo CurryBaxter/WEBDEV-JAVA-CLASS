@@ -1,4 +1,4 @@
-package main.java.exam.exceptions;
+package exam.exceptions;
 
 import exam.api.error.ProblemDetail;
 import exam.api.error.ValidationError;
