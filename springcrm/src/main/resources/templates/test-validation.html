@@ -1,32 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Validation Errors - CRM</title>
-    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <!-- Navigation -->
-    <nav class="bg-blue-600 text-white shadow-lg">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex justify-between items-center py-4">
-                <a href="/" class="flex items-center space-x-2 text-xl font-bold hover:text-blue-200 transition">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
-                    </svg>
-                    <span>CRM System</span>
-                </a>
-                <div class="flex space-x-4">
-                    <a href="/" class="hover:text-blue-200 transition">Home</a>
-                    <a href="/customers" class="hover:text-blue-200 transition">Customers</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="max-w-4xl mx-auto px-4 py-8">
+<body>
+    <div th:fragment="content" class="max-w-4xl mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold text-gray-900 mb-8">Test Validation & Debug Information</h1>
         
         <!-- Test Buttons -->
@@ -48,20 +27,6 @@
                     
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
                         Submit Invalid Form Data (Form Errors)
-                    </button>
-                </form>
-                
-                <!-- Force WebExceptionHandler Test -->
-                <form action="/customers" method="post" class="space-y-4">
-                    <input type="hidden" name="name" value="FORCE_ERROR">
-                    <input type="hidden" name="contactPerson" value="Test">
-                    <input type="hidden" name="email" value="test@example.com">
-                    <input type="hidden" name="phone" value="123456789">
-                    <input type="hidden" name="customerType" value="CORPORATION">
-                    <input type="hidden" name="status" value="LEAD">
-                    
-                    <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
-                        Force WebExceptionHandler (Debug Page)
                     </button>
                 </form>
             </div>
