@@ -31,11 +31,11 @@
                 </a>
                 <div class="flex space-x-4">
                     <a href="/" class="hover:text-blue-200 transition" 
-                       th:classappend="${#httpServletRequest.requestURI == '/'} ? 'text-blue-200 font-medium' : ''">Home</a>
+                       th:classappend="${#httpServletRequest.requestURI == '/'} ? 'text-blue-200 font-medium' : ''">Startseite</a>
                     <a href="/customers" class="hover:text-blue-200 transition" 
-                       th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/customers')} ? 'text-blue-200 font-medium' : ''">Customers</a>
+                       th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/customers')} ? 'text-blue-200 font-medium' : ''">Kunden</a>
                     <a href="/test-validation" class="hover:text-blue-200 transition" 
-                       th:classappend="${#httpServletRequest.requestURI == '/test-validation'} ? 'text-blue-200 font-medium' : ''">Test</a>
+                       th:classappend="${#httpServletRequest.requestURI == '/test-validation'} ? 'text-blue-200 font-medium' : ''">Tests</a>
                 </div>
             </div>
         </div>
@@ -49,11 +49,11 @@
         <div class="max-w-7xl mx-auto px-4">
             <div class="text-center">
                 <p class="text-sm text-gray-400">
-                    © 2024 Spring Boot CRM System. Built with Spring Boot, Thymeleaf & PostgreSQL.
+                    © 2024 Spring Boot CRM System. Erstellt mit Spring Boot, Thymeleaf & PostgreSQL.
                 </p>
                 <div class="mt-2 space-x-4">
-                    <a href="/api/customers" target="_blank" class="text-blue-400 hover:text-blue-300 text-xs">API Documentation</a>
-                    <a href="/actuator/health" target="_blank" class="text-blue-400 hover:text-blue-300 text-xs">Health Check</a>
+                    <a href="/api/customers" target="_blank" class="text-blue-400 hover:text-blue-300 text-xs">API-Dokumentation</a>
+                    <a href="/actuator/health" target="_blank" class="text-blue-400 hover:text-blue-300 text-xs">Systemstatus</a>
                 </div>
             </div>
         </div>

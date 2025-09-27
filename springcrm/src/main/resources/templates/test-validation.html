@@ -2,18 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org" 
       th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
 <head>
-    <title>Test Validation Errors - CRM</title>
+    <title>Validierung testen - CRM</title>
 </head>
 <body>
     <div th:fragment="content" class="max-w-4xl mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Test Validation & Debug Information</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8">Validierung & Debug-Informationen testen</h1>
         
         <!-- Test Buttons -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <!-- Web Form Test -->
             <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-xl font-bold mb-4 text-blue-600">Web Form Validation Test</h2>
-                <p class="text-gray-600 mb-4">Click to submit a form with invalid data. This shows validation errors IN THE FORM (not via WebExceptionHandler).</p>
+                <h2 class="text-xl font-bold mb-4 text-blue-600">Webformular-Test</h2>
+                <p class="text-gray-600 mb-4">Senden Sie ein Formular mit ungültigen Daten. Fehler erscheinen IM FORMULAR (nicht im WebExceptionHandler).</p>
                 
                 <form action="/customers" method="post" class="space-y-4 mb-4">
                     <input type="hidden" name="name" value="">
@@ -26,15 +26,15 @@
                     <input type="hidden" name="lastContactDate" value="2025-12-31">
                     
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
-                        Submit Invalid Form Data (Form Errors)
+                        Ungültige Formulardaten senden
                     </button>
                 </form>
             </div>
 
             <!-- Exception Handler Tests -->
             <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-xl font-bold mb-4 text-red-600">WebExceptionHandler Tests</h2>
-                <p class="text-gray-600 mb-4">These will trigger the WebExceptionHandler and show the debug error page.</p>
+                <h2 class="text-xl font-bold mb-4 text-red-600">WebExceptionHandler-Tests</h2>
+                <p class="text-gray-600 mb-4">Diese Aktionen lösen den WebExceptionHandler aus und zeigen die Debug-Fehlerseite.</p>
                 
                 <div class="space-y-3">
                     <form action="/test-force-error" method="post">
@@ -54,7 +54,7 @@
                     <form action="/test-force-error" method="post">
                         <input type="hidden" name="errorType" value="generic">
                         <button type="submit" class="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
-                            Generic RuntimeException
+                            Allgemeine RuntimeException
                         </button>
                     </form>
                 </div>
@@ -63,37 +63,37 @@
 
         <!-- API Test Section -->
         <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
-            <h2 class="text-xl font-bold mb-4 text-green-600">API Validation Test</h2>
-            <p class="text-gray-600 mb-4">Use curl commands to test API validation (these use GlobalExceptionHandler):</p>
+            <h2 class="text-xl font-bold mb-4 text-green-600">API-Validierungstest</h2>
+            <p class="text-gray-600 mb-4">Verwenden Sie curl, um die API-Validierung zu testen (nutzt den GlobalExceptionHandler):</p>
             
             <div class="bg-gray-100 p-3 rounded text-sm font-mono mb-4">
-                <p class="mb-2"># Test with invalid JSON:</p>
+                <p class="mb-2"># Test mit ungültigem JSON:</p>
                 <p class="text-xs break-all">curl -X POST http://localhost:8082/api/customers -H "Content-Type: application/json" -d '{"invalid": json}'</p>
             </div>
             
             <div class="bg-gray-100 p-3 rounded text-sm font-mono mb-4">
-                <p class="mb-2"># Test with validation errors:</p>
+                <p class="mb-2"># Test mit Validierungsfehlern:</p>
                 <p class="text-xs break-all">curl -X POST http://localhost:8082/api/customers -H "Content-Type: application/json" -d '{}'</p>
             </div>
             
             <a href="/api/customers" target="_blank" class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">
-                View API Endpoint
+                API-Endpunkt öffnen
             </a>
         </div>
 
         <!-- Instructions -->
         <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-            <h3 class="text-lg font-bold text-yellow-900 mb-3">Important Notes</h3>
+            <h3 class="text-lg font-bold text-yellow-900 mb-3">Wichtige Hinweise</h3>
             <div class="space-y-3 text-yellow-800">
-                <p><strong>Form Validation vs Exception Handler:</strong></p>
+                <p><strong>Formularvalidierung vs. Exception Handler:</strong></p>
                 <ul class="list-disc list-inside ml-4 space-y-1">
-                    <li><strong>Blue buttons:</strong> Normal form validation - errors show IN THE FORM (handled by controller)</li>
-                    <li><strong>Red buttons:</strong> Force exceptions - shows DEBUG ERROR PAGE (handled by WebExceptionHandler)</li>
+                    <li><strong>Blaue Buttons:</strong> Normale Formularvalidierung – Fehler erscheinen IM FORMULAR (Controller)</li>
+                    <li><strong>Rote Buttons:</strong> Erzwingen Ausnahmen – zeigt DEBUG-FEHLERSEITE (WebExceptionHandler)</li>
                 </ul>
-                <p><strong>API vs Web:</strong></p>
+                <p><strong>API vs. Web:</strong></p>
                 <ul class="list-disc list-inside ml-4 space-y-1">
-                    <li><strong>API endpoints (/api/*):</strong> Use GlobalExceptionHandler (JSON responses)</li>
-                    <li><strong>Web endpoints (/customers):</strong> Use WebExceptionHandler (HTML error pages)</li>
+                    <li><strong>API-Endpunkte (/api/*):</strong> Nutzen GlobalExceptionHandler (JSON)</li>
+                    <li><strong>Web-Endpunkte (/customers):</strong> Nutzen WebExceptionHandler (HTML)</li>
                 </ul>
             </div>
         </div>

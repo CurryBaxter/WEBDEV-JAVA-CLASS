@@ -17,13 +17,13 @@ public class TestController {
     public String forceError(@RequestParam(required = false) String errorType) {
         switch (errorType != null ? errorType : "generic") {
             case "illegal-argument":
-                throw new IllegalArgumentException("This is a test IllegalArgumentException to demonstrate debug information");
+                throw new IllegalArgumentException("Dies ist eine Test-IllegalArgumentException zur Demonstration von Debug-Informationen");
             case "null-pointer":
-                throw new NullPointerException("This is a test NullPointerException to demonstrate debug information");
+                throw new NullPointerException("Dies ist eine Test-NullPointerException zur Demonstration von Debug-Informationen");
             case "validation":
-                throw new IllegalArgumentException("Forced validation error to demonstrate debug information");
+                throw new IllegalArgumentException("Erzwungener Validierungsfehler zur Demonstration von Debug-Informationen");
             default:
-                throw new RuntimeException("This is a generic test exception to demonstrate debug information");
+                throw new RuntimeException("Dies ist eine generische Testausnahme zur Demonstration von Debug-Informationen");
         }
     }
 }

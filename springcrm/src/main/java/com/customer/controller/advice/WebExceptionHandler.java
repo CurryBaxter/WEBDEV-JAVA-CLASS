@@ -52,8 +52,8 @@ public class WebExceptionHandler {
                         null,
                         error.getDefaultMessage())));
 
-        ModelAndView mav = createErrorModelAndView("Validation Error", 
-                "Input validation failed for one or more fields", 
+        ModelAndView mav = createErrorModelAndView("Validierungsfehler", 
+                "Die Eingabe war für ein oder mehrere Felder ungültig", 
                 HttpStatus.BAD_REQUEST, request);
         
         mav.addObject("validationErrors", validationErrors);
@@ -77,8 +77,8 @@ public class WebExceptionHandler {
                         violation.getMessage()))
                 .collect(Collectors.toList());
 
-        ModelAndView mav = createErrorModelAndView("Constraint Violation", 
-                "One or more constraints were violated", 
+        ModelAndView mav = createErrorModelAndView("Verletzung von Einschränkungen", 
+                "Eine oder mehrere Einschränkungen wurden verletzt", 
                 HttpStatus.BAD_REQUEST, request);
         
         mav.addObject("validationErrors", validationErrors);
@@ -95,8 +95,8 @@ public class WebExceptionHandler {
                                                              HttpServletRequest request) {
         logger.error("Web data integrity violation: {}", ex.getMessage());
 
-        ModelAndView mav = createErrorModelAndView("Data Integrity Violation", 
-                "A database constraint was violated", 
+        ModelAndView mav = createErrorModelAndView("Datenbank-Integritätsfehler", 
+                "Eine Datenbankeinschränkung wurde verletzt", 
                 HttpStatus.CONFLICT, request);
         
         if (debugEnabled) {
@@ -111,7 +111,7 @@ public class WebExceptionHandler {
                                                       HttpServletRequest request) {
         logger.warn("Web illegal argument: {}", ex.getMessage());
 
-        ModelAndView mav = createErrorModelAndView("Invalid Request", 
+        ModelAndView mav = createErrorModelAndView("Ungültige Anfrage", 
                 ex.getMessage(), 
                 HttpStatus.BAD_REQUEST, request);
         
@@ -126,8 +126,8 @@ public class WebExceptionHandler {
     public ModelAndView handleGenericException(Exception ex, HttpServletRequest request) {
         logger.error("Unexpected web error occurred", ex);
 
-        ModelAndView mav = createErrorModelAndView("Internal Server Error", 
-                "An unexpected error occurred", 
+        ModelAndView mav = createErrorModelAndView("Interner Serverfehler", 
+                "Es ist ein unerwarteter Fehler aufgetreten", 
                 HttpStatus.INTERNAL_SERVER_ERROR, request);
         
         if (debugEnabled) {

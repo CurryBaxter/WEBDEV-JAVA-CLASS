@@ -68,7 +68,7 @@ public class CustomerWebController {
         }
 
         CustomerResponse saved = customerService.createCustomer(customer);
-        redirectAttributes.addFlashAttribute("message", "Customer created successfully");
+        redirectAttributes.addFlashAttribute("message", "Kunde erfolgreich erstellt");
         return "redirect:/customers";
     }
 
@@ -80,7 +80,7 @@ public class CustomerWebController {
             model.addAttribute("isEdit", true);
             return "customers/form";
         } else {
-            return "redirect:/customers?message=Customer not found";
+            return "redirect:/customers?message=Kunde nicht gefunden";
         }
     }
 
@@ -114,18 +114,18 @@ public class CustomerWebController {
             Optional<CustomerResponse> updatedCustomer = customerService.updateCustomer(id, customer);
             if (updatedCustomer.isPresent()) {
                 logger.info("Customer updated successfully with ID: {}", id);
-                redirectAttributes.addAttribute("message", "Customer '" + updatedCustomer.get().getName() + "' updated successfully");
+                redirectAttributes.addAttribute("message", "Kunde „" + updatedCustomer.get().getName() + "“ wurde aktualisiert");
                 return "redirect:/customers";
             } else {
                 logger.warn("Customer with ID {} not found for update", id);
-                return "redirect:/customers?message=Customer not found";
+                return "redirect:/customers?message=Kunde nicht gefunden";
             }
         } catch (Exception e) {
             logger.error("Error updating customer with ID {}", id, e);
             customer.setId(id);
             model.addAttribute("customer", customer);
             model.addAttribute("isEdit", true);
-            model.addAttribute("error", "Error updating customer: " + e.getMessage());
+            model.addAttribute("error", "Fehler beim Aktualisieren: " + e.getMessage());
             return "customers/form";
         } finally {
             logger.debug("=== UPDATE CUSTOMER REQUEST ENDED ===");
@@ -138,12 +138,12 @@ public class CustomerWebController {
             Optional<CustomerResponse> customer = customerService.getCustomerById(id);
             if (customerService.deleteCustomer(id)) {
                 redirectAttributes.addAttribute("message", 
-                    "Customer" + (customer.isPresent() ? " '" + customer.get().getName() + "'" : "") + " deleted successfully");
+                    "Kunde" + (customer.isPresent() ? " „" + customer.get().getName() + "“" : "") + " erfolgreich gelöscht");
             } else {
-                redirectAttributes.addAttribute("message", "Customer not found");
+                redirectAttributes.addAttribute("message", "Kunde nicht gefunden");
             }
         } catch (Exception e) {
-            redirectAttributes.addAttribute("message", "Error deleting customer: " + e.getMessage());
+            redirectAttributes.addAttribute("message", "Fehler beim Löschen: " + e.getMessage());
         }
         return "redirect:/customers";
     }
