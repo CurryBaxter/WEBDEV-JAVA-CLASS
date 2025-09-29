@@ -22,9 +22,29 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     public List<CustomerResponse> getAllCustomers() {
-        return customerRepository.findAll().stream()
+        return getAllCustomers(null);
+    }
+
+    public List<CustomerResponse> getAllCustomers(String query) {
+        List<Customer> customers;
+        if (hasSearchQuery(query)) {
+            String pattern = "%" + query.trim().toLowerCase() + "%";
+            customers = customerRepository.searchByPattern(pattern);
+        } else {
+            customers = customerRepository.findAll();
+        }
+
+        return customers.stream()
                 .map(CustomerResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public long getTotalCustomerCount() {
+        return customerRepository.count();
+    }
+
+    private boolean hasSearchQuery(String query) {
+        return query != null && !query.trim().isEmpty();
     }
 
     public Optional<CustomerResponse> getCustomerById(Long id) {

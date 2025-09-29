@@ -21,8 +21,8 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping
-    public List<CustomerResponse> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public List<CustomerResponse> getAllCustomers(@RequestParam(value = "q", required = false) String query) {
+        return customerService.getAllCustomers(query);
     }
 
     @GetMapping("/{id}")

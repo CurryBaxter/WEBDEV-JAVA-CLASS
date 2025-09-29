@@ -11,52 +11,56 @@
                 theme: {
                     extend: {
                         colors: {
-                            primary: '#3b82f6',
-                            secondary: '#6b7280'
+                            primary: '#0f5132',
+                            secondary: '#1f7a4d',
+                            accent: '#a3e635',
+                            neutral: '#f4f6f0',
+                            muted: '#4b5563',
+                            border: '#dce7d8'
                         }
                     }
                 }
-            }
+            };
         </script>
     </th:block>
 </head>
 <body>
     <!-- Navigation Fragment -->
-    <nav th:fragment="navigation" class="bg-blue-600 text-white shadow-lg">
+    <nav th:fragment="navigation" class="bg-primary text-white shadow-md">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center py-4">
-                <a href="/" class="flex items-center space-x-2 text-xl font-bold hover:text-blue-200 transition">
-                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <a href="/" class="flex items-center space-x-2 text-xl font-semibold hover:text-accent transition">
+                    <svg class="w-6 h-6 text-accent" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
                     </svg>
                     <span>CRM-System</span>
                 </a>
-                <div class="flex space-x-4">
-                    <a href="/" class="hover:text-blue-200 transition" 
-                       th:classappend="${#httpServletRequest.requestURI == '/'} ? 'text-blue-200 font-medium' : ''">Startseite</a>
-                    <a href="/customers" class="hover:text-blue-200 transition" 
-                       th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/customers')} ? 'text-blue-200 font-medium' : ''">Kunden</a>
-                    <a href="/test-validation" class="hover:text-blue-200 transition" 
-                       th:classappend="${#httpServletRequest.requestURI == '/test-validation'} ? 'text-blue-200 font-medium' : ''">Tests</a>
+                <div class="flex space-x-6 text-sm uppercase tracking-wide">
+                    <a href="/" class="transition hover:text-accent"
+                       th:classappend="${#httpServletRequest.requestURI == '/'} ? ' text-accent font-medium' : ' text-white/70'">Startseite</a>
+                    <a href="/customers" class="transition hover:text-accent"
+                       th:classappend="${#strings.startsWith(#httpServletRequest.requestURI, '/customers')} ? ' text-accent font-medium' : ' text-white/70'">Kunden</a>
+                    <a href="/test-validation" class="transition hover:text-accent"
+                       th:classappend="${#httpServletRequest.requestURI == '/test-validation'} ? ' text-accent font-medium' : ' text-white/70'">Tests</a>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- Success Message Fragment -->
-    <div th:fragment="success-message" th:if="${message}" class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4">
+    <div th:fragment="success-message" th:if="${message}" class="mb-6 rounded-xl border border-secondary/30 bg-secondary/10 p-4">
         <div class="flex">
-            <svg class="w-5 h-5 text-green-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+            <svg class="w-5 h-5 text-secondary mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
             </svg>
             <div class="ml-3">
-                <p class="text-sm text-gray-700" th:text="${message}"></p>
+                <p class="text-sm text-primary" th:text="${message}"></p>
             </div>
         </div>
     </div>
 
     <!-- Error Message Fragment -->
-    <div th:fragment="error-message" th:if="${error}" class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+    <div th:fragment="error-message" th:if="${error}" class="mb-6 rounded-xl border border-red-200 bg-red-50 p-4">
         <div class="flex">
             <svg class="w-5 h-5 text-red-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
@@ -69,25 +73,25 @@
 
     <!-- Loading Spinner Fragment -->
     <div th:fragment="loading-spinner" class="flex justify-center items-center py-8">
-        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span class="ml-2 text-gray-600">Loading...</span>
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary"></div>
+        <span class="ml-2 text-muted">Loading...</span>
     </div>
 
     <!-- Delete Modal Fragment -->
     <div th:fragment="delete-modal" id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden z-50">
         <div class="flex justify-center items-center min-h-screen p-4">
-            <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="bg-white rounded-xl shadow-xl border border-border max-w-md w-full">
                 <div class="p-6">
                     <div class="flex items-center mb-4">
-                        <svg class="w-6 h-6 text-red-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <svg class="w-6 h-6 text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                         </svg>
-                        <h3 class="text-lg font-medium text-gray-900">Confirm Delete</h3>
+                        <h3 class="text-lg font-medium text-primary">Confirm Delete</h3>
                     </div>
-                    <p class="text-gray-600 mb-2">Soll „<span id="customerName" class="font-medium"></span>“ wirklich gelöscht werden?</p>
-                    <p class="text-sm text-gray-500 mb-6">Diese Aktion kann nicht rückgängig gemacht werden.</p>
+                    <p class="text-muted mb-2">Soll „<span id="customerName" class="font-medium"></span>“ wirklich gelöscht werden?</p>
+                    <p class="text-sm text-muted/70 mb-6">Diese Aktion kann nicht rückgängig gemacht werden.</p>
                     <div class="flex justify-end space-x-3">
-                        <button type="button" onclick="closeDeleteModal()" class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition">Abbrechen</button>
+                        <button type="button" onclick="closeDeleteModal()" class="px-4 py-2 border border-border text-muted rounded-lg hover:bg-neutral transition">Abbrechen</button>
                         <form id="deleteForm" method="post" style="display: inline;">
                             <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">Löschen</button>
                         </form>
@@ -118,15 +122,15 @@
     </script>
 
     <!-- Footer Fragment -->
-    <footer th:fragment="footer" class="bg-gray-800 text-white py-8 mt-16">
+    <footer th:fragment="footer" class="bg-primary text-white py-8 mt-16">
         <div class="max-w-7xl mx-auto px-4">
-            <div class="text-center">
-                <p class="text-sm text-gray-400">
+            <div class="text-center space-y-2">
+                <p class="text-sm text-white/80">
                     © 2024 Spring Boot CRM System. Erstellt mit Spring Boot, Thymeleaf & PostgreSQL.
                 </p>
-                <div class="mt-2 space-x-4">
-                    <a href="/api/customers" target="_blank" class="text-blue-400 hover:text-blue-300 text-xs">API-Dokumentation</a>
-                    <a href="/actuator/health" target="_blank" class="text-blue-400 hover:text-blue-300 text-xs">Systemstatus</a>
+                <div class="space-x-4 text-xs uppercase tracking-wide">
+                    <a href="/api/customers" target="_blank" class="text-accent hover:text-secondary transition">API-Dokumentation</a>
+                    <a href="/actuator/health" target="_blank" class="text-accent hover:text-secondary transition">Systemstatus</a>
                 </div>
             </div>
         </div>

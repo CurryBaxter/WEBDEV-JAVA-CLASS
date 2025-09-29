@@ -6,14 +6,14 @@
 </head>
 <body>
     <div th:fragment="content" class="max-w-4xl mx-auto px-4 py-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Validierung & Debug-Informationen testen</h1>
+    <h1 class="text-3xl font-semibold text-primary mb-8">Validierung & Debug-Informationen testen</h1>
         
         <!-- Test Buttons -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <!-- Web Form Test -->
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-xl font-bold mb-4 text-blue-600">Webformular-Test</h2>
-                <p class="text-gray-600 mb-4">Senden Sie ein Formular mit ungültigen Daten. Fehler erscheinen IM FORMULAR (nicht im WebExceptionHandler).</p>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-border">
+                <h2 class="text-xl font-semibold mb-4 text-primary">Webformular-Test</h2>
+                <p class="text-muted mb-4">Senden Sie ein Formular mit ungültigen Daten. Fehler erscheinen IM FORMULAR (nicht im WebExceptionHandler).</p>
                 
                 <form action="/customers" method="post" class="space-y-4 mb-4">
                     <input type="hidden" name="name" value="">
@@ -25,16 +25,16 @@
                     <input type="hidden" name="industry" value="This is a very long industry description that exceeds the maximum allowed length of 100 characters and should trigger a validation error">
                     <input type="hidden" name="lastContactDate" value="2025-12-31">
                     
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                    <button type="submit" class="w-full bg-primary hover:bg-secondary text-white px-4 py-2 rounded-lg transition">
                         Ungültige Formulardaten senden
                     </button>
                 </form>
             </div>
 
             <!-- Exception Handler Tests -->
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <h2 class="text-xl font-bold mb-4 text-red-600">WebExceptionHandler-Tests</h2>
-                <p class="text-gray-600 mb-4">Diese Aktionen lösen den WebExceptionHandler aus und zeigen die Debug-Fehlerseite.</p>
+            <div class="bg-white p-6 rounded-xl shadow-lg border border-border">
+                <h2 class="text-xl font-semibold mb-4 text-red-600">WebExceptionHandler-Tests</h2>
+                <p class="text-muted mb-4">Diese Aktionen lösen den WebExceptionHandler aus und zeigen die Debug-Fehlerseite.</p>
                 
                 <div class="space-y-3">
                     <form action="/test-force-error" method="post">
@@ -62,32 +62,32 @@
         </div>
 
         <!-- API Test Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg mb-8">
-            <h2 class="text-xl font-bold mb-4 text-green-600">API-Validierungstest</h2>
-            <p class="text-gray-600 mb-4">Verwenden Sie curl, um die API-Validierung zu testen (nutzt den GlobalExceptionHandler):</p>
+        <div class="bg-white p-6 rounded-xl shadow-lg border border-border mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-secondary">API-Validierungstest</h2>
+            <p class="text-muted mb-4">Verwenden Sie curl, um die API-Validierung zu testen (nutzt den GlobalExceptionHandler):</p>
             
-            <div class="bg-gray-100 p-3 rounded text-sm font-mono mb-4">
+            <div class="bg-neutral p-3 rounded text-sm font-mono mb-4 border border-border/60">
                 <p class="mb-2"># Test mit ungültigem JSON:</p>
                 <p class="text-xs break-all">curl -X POST http://localhost:8082/api/customers -H "Content-Type: application/json" -d '{"invalid": json}'</p>
             </div>
             
-            <div class="bg-gray-100 p-3 rounded text-sm font-mono mb-4">
+            <div class="bg-neutral p-3 rounded text-sm font-mono mb-4 border border-border/60">
                 <p class="mb-2"># Test mit Validierungsfehlern:</p>
                 <p class="text-xs break-all">curl -X POST http://localhost:8082/api/customers -H "Content-Type: application/json" -d '{}'</p>
             </div>
             
-            <a href="/api/customers" target="_blank" class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">
+            <a href="/api/customers" target="_blank" class="inline-block bg-secondary hover:bg-primary text-white px-4 py-2 rounded-lg transition">
                 API-Endpunkt öffnen
             </a>
         </div>
 
         <!-- Instructions -->
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-            <h3 class="text-lg font-bold text-yellow-900 mb-3">Wichtige Hinweise</h3>
-            <div class="space-y-3 text-yellow-800">
+        <div class="bg-secondary/10 border border-secondary/30 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-primary mb-3">Wichtige Hinweise</h3>
+            <div class="space-y-3 text-secondary">
                 <p><strong>Formularvalidierung vs. Exception Handler:</strong></p>
                 <ul class="list-disc list-inside ml-4 space-y-1">
-                    <li><strong>Blaue Buttons:</strong> Normale Formularvalidierung – Fehler erscheinen IM FORMULAR (Controller)</li>
+                    <li><strong>Grüne Buttons:</strong> Normale Formularvalidierung – Fehler erscheinen IM FORMULAR (Controller)</li>
                     <li><strong>Rote Buttons:</strong> Erzwingen Ausnahmen – zeigt DEBUG-FEHLERSEITE (WebExceptionHandler)</li>
                 </ul>
                 <p><strong>API vs. Web:</strong></p>

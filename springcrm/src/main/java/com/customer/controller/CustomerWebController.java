@@ -27,12 +27,22 @@ public class CustomerWebController {
     private CustomerService customerService;
 
     @GetMapping
-    public String listCustomers(Model model, @RequestParam(required = false) String message) {
-        List<CustomerResponse> customers = customerService.getAllCustomers();
+    public String listCustomers(Model model,
+                                @RequestParam(required = false) String message,
+                                @RequestParam(value = "q", required = false) String query) {
+        List<CustomerResponse> customers = customerService.getAllCustomers(query);
+        boolean searching = query != null && !query.trim().isEmpty();
+
         model.addAttribute("customers", customers);
+        model.addAttribute("searchTerm", query);
+        model.addAttribute("searching", searching);
+        model.addAttribute("resultCount", customers.size());
+        model.addAttribute("totalCount", customerService.getTotalCustomerCount());
+
         if (message != null) {
             model.addAttribute("message", message);
         }
+
         return "customers/list";
     }
 
@@ -67,7 +77,7 @@ public class CustomerWebController {
             return "customers/form";
         }
 
-        CustomerResponse saved = customerService.createCustomer(customer);
+    customerService.createCustomer(customer);
         redirectAttributes.addFlashAttribute("message", "Kunde erfolgreich erstellt");
         return "redirect:/customers";
     }

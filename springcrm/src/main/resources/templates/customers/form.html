@@ -8,15 +8,15 @@
     <div th:fragment="content" class="max-w-4xl mx-auto px-4 py-8">
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-900">
-                <svg th:class="${isEdit ? 'w-8 h-8 inline mr-3 text-blue-600' : 'w-8 h-8 inline mr-3 text-green-600'}" 
+            <h1 class="text-3xl font-semibold text-primary">
+                <svg th:class="${isEdit ? 'w-8 h-8 inline mr-3 text-primary' : 'w-8 h-8 inline mr-3 text-secondary'}" 
                      fill="currentColor" viewBox="0 0 20 20">
                     <path th:if="${isEdit}" d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
-                    <path th:unless="${isEdit}" d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path>
+                    <path th:unless="${isEdit}" fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path>
                 </svg>
                 <span th:text="${isEdit ? 'Kunde bearbeiten' : 'Neuen Kunden anlegen'}">Kundenformular</span>
             </h1>
-            <a href="/customers" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition flex items-center space-x-2">
+            <a href="/customers" class="bg-muted hover:bg-primary text-white px-4 py-2 rounded-lg transition flex items-center space-x-2">
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
                 </svg>
@@ -28,14 +28,14 @@
         <div th:replace="~{fragments/common :: error-message}"></div>
 
         <!-- Form Card -->
-        <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="bg-white rounded-xl shadow-lg border border-border overflow-hidden">
             <div class="px-8 py-6">
                 <form th:action="${isEdit ? '/customers/' + customer.id : '/customers'}" 
                       th:object="${customer}" method="post" class="space-y-6" novalidate>
                     
                     <!-- Global Error Summary -->
                     <div th:if="${#fields.hasAnyErrors()}" class="mb-6 bg-red-50 border border-red-200 rounded-lg p-6">
-                        <h2 class="text-lg font-semibold text-red-900 mb-2">Bitte behebe die folgenden Fehler:</h2>
+                        <h2 class="text-lg font-semibold text-red-800 mb-2">Bitte behebe die folgenden Fehler:</h2>
                         <ul class="space-y-2">
                             <li th:each="err : ${#fields.errors('*')}" class="text-sm text-red-700" th:text="${err}"></li>
                         </ul>
@@ -60,16 +60,16 @@
                     
                     <!-- Basic Information -->
                     <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Allgemeine Informationen</h3>
+                        <h3 class="text-lg font-medium text-primary mb-4">Allgemeine Informationen</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Company Name -->
                             <div>
-                                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="name" class="block text-sm font-medium text-muted mb-2">
                                     Firmenname <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="name" th:field="*{name}" 
-                                       class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       th:classappend="${#fields.hasErrors('name')} ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'"
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-primary"
+                        th:classappend="${#fields.hasErrors('name')} ? 'border-red-500 focus:ring-red-500' : 'border-border'"
                                        maxlength="100" placeholder="Firmenname eingeben">
                                 <div th:if="${#fields.hasErrors('name')}" class="mt-1">
                                     <p th:each="err : ${#fields.errors('name')}" th:text="${err}" class="text-sm text-red-600"></p>
@@ -78,12 +78,12 @@
 
                             <!-- Contact Person -->
                             <div>
-                                <label for="contactPerson" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="contactPerson" class="block text-sm font-medium text-muted mb-2">
                                     Ansprechpartner <span class="text-red-500">*</span>
                                 </label>
                                 <input type="text" id="contactPerson" th:field="*{contactPerson}" 
-                                       class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       th:classappend="${#fields.hasErrors('contactPerson')} ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'"
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-primary"
+                        th:classappend="${#fields.hasErrors('contactPerson')} ? 'border-red-500 focus:ring-red-500' : 'border-border'"
                                        maxlength="100" placeholder="Namen des Ansprechpartners eingeben">
                                 <div th:if="${#fields.hasErrors('contactPerson')}" class="mt-1">
                                     <p th:each="err : ${#fields.errors('contactPerson')}" th:text="${err}" class="text-sm text-red-600"></p>
@@ -94,14 +94,14 @@
 
                     <!-- Contact Information -->
                     <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Kontaktinformationen</h3>
+                        <h3 class="text-lg font-medium text-primary mb-4">Kontaktinformationen</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Email -->
                             <div>
-                                <label for="email" class="block text-sm font-medium text-gray-700 mb-2">E-Mail</label>
+                    <label for="email" class="block text-sm font-medium text-muted mb-2">E-Mail</label>
                                 <input type="email" id="email" th:field="*{email}" 
-                                       class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       th:classappend="${#fields.hasErrors('email')} ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'"
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-primary"
+                        th:classappend="${#fields.hasErrors('email')} ? 'border-red-500 focus:ring-red-500' : 'border-border'"
                                        maxlength="100" placeholder="E-Mail-Adresse eingeben">
                                 <div th:if="${#fields.hasErrors('email')}" class="mt-1">
                                     <p th:each="err : ${#fields.errors('email')}" th:text="${err}" class="text-sm text-red-600"></p>
@@ -110,12 +110,12 @@
 
                             <!-- Phone -->
                             <div>
-                                <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="phone" class="block text-sm font-medium text-muted mb-2">
                                     Telefonnummer <span class="text-red-500">*</span>
                                 </label>
                                 <input type="tel" id="phone" th:field="*{phone}" 
-                                       class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       th:classappend="${#fields.hasErrors('phone')} ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'"
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-primary"
+                        th:classappend="${#fields.hasErrors('phone')} ? 'border-red-500 focus:ring-red-500' : 'border-border'"
                                        maxlength="20" placeholder="Telefonnummer eingeben">
                                 <div th:if="${#fields.hasErrors('phone')}" class="mt-1">
                                     <p th:each="err : ${#fields.errors('phone')}" th:text="${err}" class="text-sm text-red-600"></p>
@@ -125,10 +125,10 @@
 
                         <!-- Address -->
                         <div class="mt-6">
-                            <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Adresse</label>
+                            <label for="address" class="block text-sm font-medium text-muted mb-2">Adresse</label>
                             <textarea id="address" th:field="*{address}" rows="3" 
-                                      class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                      th:classappend="${#fields.hasErrors('address')} ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'"
+                                      class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-primary"
+                                      th:classappend="${#fields.hasErrors('address')} ? 'border-red-500 focus:ring-red-500' : 'border-border'"
                                       maxlength="255" placeholder="Adresse eingeben (optional)"></textarea>
                             <div th:if="${#fields.hasErrors('address')}" class="mt-1">
                                 <p th:each="err : ${#fields.errors('address')}" th:text="${err}" class="text-sm text-red-600"></p>
@@ -138,16 +138,16 @@
 
                     <!-- Business Information -->
                     <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Unternehmensinformationen</h3>
+                        <h3 class="text-lg font-medium text-primary mb-4">Unternehmensinformationen</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Customer Type -->
                             <div>
-                                <label for="customerType" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="customerType" class="block text-sm font-medium text-muted mb-2">
                                     Kundentyp <span class="text-red-500">*</span>
                                 </label>
                                 <select id="customerType" th:field="*{customerType}" 
-                                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        th:classappend="${#fields.hasErrors('customerType')} ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'">
+                    class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-primary"
+                    th:classappend="${#fields.hasErrors('customerType')} ? 'border-red-500 focus:ring-red-500' : 'border-border'">
                                     <option value="">Typ auswählen</option>
                                     <option value="SOLE_PROPRIETORSHIP">Einzelunternehmen</option>
                                     <option value="LIMITED_LIABILITY_COMPANY">Limited Liability Company (LLC)</option>
@@ -161,12 +161,12 @@
 
                             <!-- Status -->
                             <div>
-                                <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="status" class="block text-sm font-medium text-muted mb-2">
                                     Status <span class="text-red-500">*</span>
                                 </label>
                                 <select id="status" th:field="*{status}" 
-                                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        th:classappend="${#fields.hasErrors('status')} ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'">
+                    class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-primary"
+                    th:classappend="${#fields.hasErrors('status')} ? 'border-red-500 focus:ring-red-500' : 'border-border'">
                                     <option value="">Status auswählen</option>
                                     <option value="LEAD">Lead</option>
                                     <option value="COLD">Cold (Kaltkontakt)</option>
@@ -180,10 +180,10 @@
 
                             <!-- Industry -->
                             <div>
-                                <label for="industry" class="block text-sm font-medium text-gray-700 mb-2">Branche</label>
+                    <label for="industry" class="block text-sm font-medium text-muted mb-2">Branche</label>
                                 <input type="text" id="industry" th:field="*{industry}" 
-                                       class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       th:classappend="${#fields.hasErrors('industry')} ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'"
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-primary"
+                        th:classappend="${#fields.hasErrors('industry')} ? 'border-red-500 focus:ring-red-500' : 'border-border'"
                                        maxlength="100" placeholder="Branche eingeben (optional)">
                                 <div th:if="${#fields.hasErrors('industry')}" class="mt-1">
                                 </div>
@@ -191,10 +191,10 @@
 
                             <!-- Last Contact Date -->
                             <div>
-                                <label for="lastContactDate" class="block text-sm font-medium text-gray-700 mb-2">Letzter Kontakt</label>
+                    <label for="lastContactDate" class="block text-sm font-medium text-muted mb-2">Letzter Kontakt</label>
                                 <input type="date" id="lastContactDate" th:field="*{lastContactDate}" 
-                                       class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                       th:classappend="${#fields.hasErrors('lastContactDate')} ? 'border-red-500 focus:ring-red-500' : 'border-gray-300'">
+                        class="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent text-primary"
+                        th:classappend="${#fields.hasErrors('lastContactDate')} ? 'border-red-500 focus:ring-red-500' : 'border-border'">
                                 <div th:if="${#fields.hasErrors('lastContactDate')}" class="mt-1">
                                 </div>
                             </div>
@@ -203,43 +203,29 @@
 
                     <!-- Contact Preferences -->
                     <div>
-                        <h3 class="text-lg font-medium text-gray-900 mb-4">Kontaktpräferenzen</h3>
-                        <div class="space-y-2">
-                            <p class="text-sm text-gray-600 mb-3">Bevorzugte Kontaktwege auswählen:</p>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                                <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-                                    <input type="checkbox" th:field="*{wantsToBeContactedBy}" value="email" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                    <span class="text-sm text-gray-700">E-Mail</span>
+                        <h3 class="text-lg font-medium text-primary mb-4">Kontaktpräferenzen</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div th:each="method : ${ {'E-Mail', 'Telefon', 'Post', 'SMS', 'Video-Call', 'Vor-Ort-Termin'} }" class="flex items-center">
+                                <input type="checkbox" th:id="'contact-method-' + ${method}" th:field="*{wantsToBeContactedBy}" th:value="${method}"
+                                       class="h-4 w-4 text-secondary border-border rounded focus:ring-secondary">
+                                <label th:for="'contact-method-' + ${method}" class="ml-3 block text-sm text-muted" th:text="${method}">
+                                    Methode
                                 </label>
-                                <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-                                    <input type="checkbox" th:field="*{wantsToBeContactedBy}" value="phone" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                    <span class="text-sm text-gray-700">Telefon</span>
-                                </label>
-                                <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-                                    <input type="checkbox" th:field="*{wantsToBeContactedBy}" value="mail" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                    <span class="text-sm text-gray-700">Post</span>
-                                </label>
-                                <label class="flex items-center space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
-                                    <input type="checkbox" th:field="*{wantsToBeContactedBy}" value="sms" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                                    <span class="text-sm text-gray-700">SMS</span>
-                                </label>
-                            </div>
-                            <div th:if="${#fields.hasErrors('wantsToBeContactedBy')}" class="mt-1">
-                                <p th:each="err : ${#fields.errors('wantsToBeContactedBy')}" th:text="${err}" class="text-sm text-red-600"></p>
                             </div>
                         </div>
+                        <div th:if="${#fields.hasErrors('wantsToBeContactedBy')}" class="mt-2 text-sm text-red-600" th:errors="*{wantsToBeContactedBy}"></div>
                     </div>
 
                     <!-- Form Actions -->
-                    <div class="border-t border-gray-200 pt-6">
+                    <div class="border-t border-border pt-6">
                         <div class="flex justify-end space-x-4">
-                            <a href="/customers" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition flex items-center space-x-2">
+                            <a href="/customers" class="px-6 py-2 border border-border text-muted rounded-lg hover:bg-neutral transition flex items-center space-x-2">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
                                 </svg>
                                 <span>Abbrechen</span>
                             </a>
-                            <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center space-x-2">
+                            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition flex items-center space-x-2">
                                 <svg th:if="${isEdit}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                 </svg>
                                 <svg th:unless="${isEdit}" class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">

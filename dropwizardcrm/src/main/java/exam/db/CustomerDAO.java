@@ -43,6 +43,20 @@ public interface CustomerDAO {
     @SqlQuery("SELECT * FROM customers WHERE customer_type = :customerType")
     List<Customer> findByCustomerType(@Bind("customerType") String customerType);
 
+    @SqlQuery("SELECT * FROM customers WHERE " +
+        "CAST(id AS TEXT) ILIKE :pattern OR " +
+        "name ILIKE :pattern OR " +
+        "contact_person ILIKE :pattern OR " +
+        "COALESCE(address, '') ILIKE :pattern OR " +
+        "COALESCE(email, '') ILIKE :pattern OR " +
+        "COALESCE(phone, '') ILIKE :pattern OR " +
+        "customer_type ILIKE :pattern OR " +
+        "COALESCE(industry, '') ILIKE :pattern OR " +
+        "status ILIKE :pattern OR " +
+        "COALESCE(wants_to_be_contacted_by, '') ILIKE :pattern " +
+        "ORDER BY name, id")
+    List<Customer> searchByPattern(@Bind("pattern") String pattern);
+
     @SqlUpdate("INSERT INTO customers (name, contact_person, address, email, phone, customer_type, industry, last_contact_date, status, wants_to_be_contacted_by) " +
             "VALUES (:name, :contactPerson, :address, :email, :phone, :customerType, :industry, :lastContactDate, :status, :wantsToBeContactedByString)")
     @org.jdbi.v3.sqlobject.statement.GetGeneratedKeys
@@ -105,5 +119,19 @@ public interface CustomerDAO {
             update(customer);
             return customer;
         }
+    }
+
+    default List<Customer> search(String term) {
+        if (term == null) {
+            return findAll();
+        }
+
+        String trimmed = term.trim();
+        if (trimmed.isEmpty()) {
+            return findAll();
+        }
+
+        String pattern = "%" + trimmed + "%";
+        return searchByPattern(pattern);
     }
 }

@@ -68,8 +68,14 @@ public class CustomerViewResource {
 
     @GET
     @Path("/customers")
-    public CustomerListView listCustomers(@QueryParam("message") String message) {
-        return new CustomerListView(customerDAO.findAll(), message);
+    public CustomerListView listCustomers(@QueryParam("message") String message,
+                                          @QueryParam("q") String query) {
+        String searchTerm = trimToNull(query);
+        List<Customer> customers = searchTerm == null
+                ? customerDAO.findAll()
+                : customerDAO.search(searchTerm);
+        long totalCount = customerDAO.count();
+        return new CustomerListView(customers, message, searchTerm, totalCount);
     }
 
     @GET
@@ -309,7 +315,7 @@ public class CustomerViewResource {
     private static Map<String, String> createStatusOptions() {
         Map<String, String> options = new LinkedHashMap<>();
         for (Customer.Status status : Customer.Status.values()) {
-            options.put(status.name(), status.name().substring(0, 1) + status.name().substring(1).toLowerCase(Locale.GERMAN));
+            options.put(status.name(), status.name().substring(0, 1).toUpperCase() + status.name().substring(1).toLowerCase());
         }
         return options;
     }
@@ -318,14 +324,15 @@ public class CustomerViewResource {
         Map<String, String> options = new LinkedHashMap<>();
         options.put("EMAIL", "E-Mail");
         options.put("PHONE", "Telefon");
-        options.put("VISIT", "Vor-Ort-Termin");
+        options.put("POST", "Post");
+        options.put("SMS", "SMS");
         options.put("VIDEO_CALL", "Video-Call");
-        options.put("CHAT", "Live-Chat");
+        options.put("IN_PERSON", "Vor-Ort-Termin");
         return options;
     }
 
     private static String trim(String value) {
-        return value == null ? null : value.trim();
+        return value == null ? "" : value.trim();
     }
 
     private static String trimToNull(String value) {

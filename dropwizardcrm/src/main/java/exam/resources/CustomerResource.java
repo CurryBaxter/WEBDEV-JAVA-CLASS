@@ -23,8 +23,8 @@ public class CustomerResource {
     }
 
     @GET
-    public List<Customer> getAllCustomers() {
-        return customerDAO.findAll();
+    public List<Customer> getAllCustomers(@QueryParam("q") String query) {
+        return customerDAO.search(query);
     }
 
     @GET
