@@ -65,6 +65,9 @@ public interface CustomerDAO {
     @SqlUpdate("DELETE FROM customers WHERE id = :id")
     int deleteById(@Bind("id") long id);
 
+    @SqlQuery("SELECT COUNT(*) FROM customers")
+    long count();
+
     default Customer save(Customer customer) {
         if (customer == null) {
             throw new IllegalArgumentException("Customer cannot be null");
@@ -90,8 +93,10 @@ public interface CustomerDAO {
         }
 
         // Prepare contact methods string
-        if (customer.getWantsToBeContactedBy() != null) {
+        if (customer.getWantsToBeContactedBy() != null && !customer.getWantsToBeContactedBy().isEmpty()) {
             customer.setWantsToBeContactedByString(String.join(",", customer.getWantsToBeContactedBy()));
+        } else {
+            customer.setWantsToBeContactedByString(null);
         }
 
         if (customer.getId() == 0) {

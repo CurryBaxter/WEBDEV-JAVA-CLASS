@@ -2,10 +2,11 @@ package exam.exceptions;
 
 import exam.api.error.ProblemDetail;
 import exam.api.error.ValidationError;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -20,8 +21,12 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
 
     private static final Logger logger = LoggerFactory.getLogger(ValidationExceptionMapper.class);
 
-    @Context
-    private ContainerRequestContext requestContext;
+        @Context
+        private HttpServletRequest request;
+
+        @Context
+        private HttpHeaders httpHeaders;
+
 
     @Override
     public Response toResponse(ConstraintViolationException exception) {
@@ -36,13 +41,11 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
                 "Constraint Violation",
                 Response.Status.BAD_REQUEST.getStatusCode(),
                 "One or more constraints were violated",
-                getRequestPath()
+                request != null ? request.getRequestURI() : "unknown"
         );
         problemDetail.setValidationErrors(validationErrors);
 
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity(problemDetail)
-                .build();
+        return ProblemDetailResponseBuilder.build(request, httpHeaders, Response.Status.BAD_REQUEST, problemDetail);
     }
 
     private ValidationError createValidationError(ConstraintViolation<?> violation) {
@@ -59,12 +62,5 @@ public class ValidationExceptionMapper implements ExceptionMapper<ConstraintViol
         return propertyPath.contains(".") ?
                 propertyPath.substring(propertyPath.lastIndexOf('.') + 1) :
                 propertyPath;
-    }
-
-    private String getRequestPath() {
-        if (requestContext != null && requestContext.getUriInfo() != null) {
-            return requestContext.getUriInfo().getPath();
-        }
-        return "unknown";
     }
 }

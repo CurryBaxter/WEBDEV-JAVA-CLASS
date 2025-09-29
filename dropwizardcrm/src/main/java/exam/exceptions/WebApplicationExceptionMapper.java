@@ -1,9 +1,10 @@
 package exam.exceptions;
 
 import exam.api.error.ProblemDetail;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.WebApplicationException;
-import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -16,14 +17,16 @@ public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplica
     private static final Logger logger = LoggerFactory.getLogger(WebApplicationExceptionMapper.class);
 
     @Context
-    private ContainerRequestContext requestContext;
+    private HttpServletRequest request;
+
+    @Context
+    private HttpHeaders httpHeaders;
 
     @Override
     public Response toResponse(WebApplicationException exception) {
         Response response = exception.getResponse();
         int status = response.getStatus();
 
-        // Only log errors (5xx), not client errors (4xx)
         if (status >= 500) {
             logger.error("Web application error occurred: {}", exception.getMessage(), exception);
         } else if (status >= 400) {
@@ -39,12 +42,10 @@ public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplica
                 title,
                 status,
                 detail,
-                getRequestPath()
+        request != null ? request.getRequestURI() : "unknown"
         );
 
-        return Response.status(status)
-                .entity(problemDetail)
-                .build();
+        return ProblemDetailResponseBuilder.build(request, httpHeaders, response.getStatusInfo(), problemDetail);
     }
 
     private String getTypeForStatus(int status) {
@@ -90,12 +91,5 @@ public class WebApplicationExceptionMapper implements ExceptionMapper<WebApplica
             case 500: return "An internal server error occurred";
             default: return "An HTTP error occurred";
         }
-    }
-
-    private String getRequestPath() {
-        if (requestContext != null && requestContext.getUriInfo() != null) {
-            return requestContext.getUriInfo().getPath();
-        }
-        return "unknown";
     }
 }

@@ -2,8 +2,9 @@ package exam.exceptions;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import exam.api.error.ProblemDetail;
-import jakarta.ws.rs.container.ContainerRequestContext;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
@@ -16,29 +17,26 @@ public class JsonProcessingExceptionMapper implements ExceptionMapper<JsonProces
     private static final Logger logger = LoggerFactory.getLogger(JsonProcessingExceptionMapper.class);
 
     @Context
-    private ContainerRequestContext requestContext;
+    private HttpServletRequest request;
+
+    @Context
+    private HttpHeaders httpHeaders;
+
 
     @Override
     public Response toResponse(JsonProcessingException exception) {
         logger.warn("JSON processing error occurred: {}", exception.getMessage());
+
+    String instance = request != null ? request.getRequestURI() : "unknown";
 
         ProblemDetail problemDetail = new ProblemDetail(
                 "https://problems.customer-crm.com/malformed-json",
                 "Malformed JSON",
                 Response.Status.BAD_REQUEST.getStatusCode(),
                 "Request body contains malformed JSON: " + exception.getOriginalMessage(),
-                getRequestPath()
+        instance
         );
 
-        return Response.status(Response.Status.BAD_REQUEST)
-                .entity(problemDetail)
-                .build();
-    }
-
-    private String getRequestPath() {
-        if (requestContext != null && requestContext.getUriInfo() != null) {
-            return requestContext.getUriInfo().getPath();
-        }
-        return "unknown";
+    return ProblemDetailResponseBuilder.build(request, httpHeaders, Response.Status.BAD_REQUEST, problemDetail);
     }
 }

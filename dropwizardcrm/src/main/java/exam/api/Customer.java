@@ -36,6 +36,7 @@ public class Customer {
     @JsonProperty
     private String email;
 
+    @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^[+]?[0-9\\s\\-()]+$", message = "Phone number format is invalid")
     @Size(max = 20, message = "Phone number must not exceed 20 characters")
     @JsonProperty
@@ -71,7 +72,9 @@ public class Customer {
 
     public enum CustomerType {
         SOLE_PROPRIETORSHIP,
-        LIMITED_LIABILITY_COMPANY
+        LIMITED_LIABILITY_COMPANY,
+        CORPORATION,
+        NON_PROFIT_ORGANIZATION
     }
 
     // Constructors
