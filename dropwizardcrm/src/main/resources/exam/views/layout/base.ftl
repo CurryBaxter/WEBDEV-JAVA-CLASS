@@ -58,7 +58,7 @@
     <footer class="bg-primary text-white py-8 mt-12">
         <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
             <p class="text-sm text-white/80">
-                © 2024 Dropwizard CRM System. Gebaut mit Dropwizard, FreeMarker & PostgreSQL.
+                © 2025 Dropwizard CRM System. Gebaut mit Dropwizard, FreeMarker & PostgreSQL von Felix Schreiber.
             </p>
             <div class="flex justify-center gap-4 text-xs uppercase tracking-wide">
                 <a href="/customers" class="text-accent hover:text-secondary transition" target="_blank">API-Endpunkt</a>

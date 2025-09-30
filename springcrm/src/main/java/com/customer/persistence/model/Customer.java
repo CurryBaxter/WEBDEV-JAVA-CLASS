@@ -92,7 +92,6 @@ public class Customer {
         this.wantsToBeContactedBy = wantsToBeContactedBy;
     }
 
-    // Getters and Setters
     @JsonProperty
     public long getId() { return id; }
     

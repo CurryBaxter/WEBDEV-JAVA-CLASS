@@ -41,7 +41,6 @@ public class CustomerResponse {
     @JsonProperty
     private List<String> wantsToBeContactedBy;
 
-    // Constructors
     public CustomerResponse() {}
 
     public CustomerResponse(Customer customer) {

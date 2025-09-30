@@ -77,7 +77,6 @@ public class Customer {
         NON_PROFIT_ORGANIZATION
     }
 
-    // Constructors
     public Customer() {}
 
     public Customer(long id, String name, String contactPerson, String address, String email, String phone,
@@ -96,7 +95,6 @@ public class Customer {
         this.wantsToBeContactedBy = wantsToBeContactedBy;
     }
 
-    // Getters and Setters
     public long getId() { return id; }
     public void setId(long id) { this.id = id; }
 

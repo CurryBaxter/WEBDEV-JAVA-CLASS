@@ -31,7 +31,7 @@ public class CustomerRequest {
     @JsonProperty
     private String email;
 
-    @NotBlank(message = "Phone number is required")  // Changed from @Size to @NotBlank
+    @NotBlank(message = "Phone number is required")
     @Pattern(regexp = "^[+]?[0-9\\s\\-()]+$", message = "Phone number format is invalid")
     @Size(max = 20, message = "Phone number must not exceed 20 characters")
     @JsonProperty
@@ -57,10 +57,8 @@ public class CustomerRequest {
     @JsonProperty
     private List<String> wantsToBeContactedBy;
 
-    // Constructors
     public CustomerRequest() {}
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
