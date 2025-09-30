@@ -1,15 +1,45 @@
-# CRM
+# Dropwizard CRM System
 
-How to start the CRM application
----
+Ein schlankes CRM-System basierend auf Dropwizard Framework.
 
-1. Run `mvn clean install` to build your application
-1. Start application with `java -jar target/customer-1.0-SNAPSHOT.jar server config.yml`
-1. To check that your application is running enter url `http://localhost:8080`
+## Funktionen
 
-Health Check
----
+- Kundenverwaltung mit vollständigem CRUD
+- Weboberfläche mit FreeMarker Templates
+- REST API mit JSON-Responses
+- PostgreSQL Datenbankanbindung
+- Validierung und Fehlerbehandlung
+- Suche und Filterung
 
-To see your applications health enter url `http://localhost:8081/healthcheck`
+## Endpoints
 
-mvn clean compile exec:java -Dexec.mainClass="exam.CRMApplication" -Dexec.args="server config.yml --reload"
+### Web-Interface (HTML)
+- `GET /ui` - Startseite
+- `GET /ui/customers` - Kundenliste
+- `GET /ui/customers/new` - Neuen Kunden anlegen
+- `GET /ui/customers/{id}` - Kundendetails
+- `GET /ui/customers/{id}/edit` - Kunde bearbeiten
+- `POST /ui/customers` - Kunde erstellen
+- `POST /ui/customers/{id}` - Kunde aktualisieren
+- `POST /ui/customers/{id}/delete` - Kunde löschen
+- `GET /ui/test-validation` - Validierung testen
+
+### REST API (JSON)
+- `GET /customers` - Alle Kunden (mit Suche `?q=term`)
+- `GET /customers/{id}` - Kunde per ID
+- `POST /customers` - Neuen Kunden erstellen
+- `PUT /customers/{id}` - Kunde aktualisieren
+- `DELETE /customers/{id}` - Kunde löschen
+
+## Build & Start
+
+```bash
+# Build
+mvn clean package
+
+# Start (benötigt PostgreSQL auf localhost:5432)
+java -jar target/customer-1.0-SNAPSHOT.jar server config.yml
+```
+
+**Zugriff:** http://localhost:8080/ui  
+**API:** http://localhost:8080/customers
